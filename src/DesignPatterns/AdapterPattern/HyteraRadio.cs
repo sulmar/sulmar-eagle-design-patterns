@@ -2,10 +2,41 @@
 
 namespace AdapterPattern
 {
+    public class Message
+    {
+        public string Content { get; set; }
+    }
+
+
+    // Abstract Adapter
+    public interface IRadioAdapter
+    {
+        void Send(byte channel, Message message);
+    }
+
+    // Concrete Adapter
+    public class HyteraRadioAdapter : IRadioAdapter
+    {
+        // Adaptee
+        private readonly HyteraRadio radio;
+
+        public HyteraRadioAdapter()
+        {
+            radio = new HyteraRadio();
+        }
+
+        public void Send(byte channel, Message message)
+        {
+            radio.Init();
+            radio.SendMessage(channel, message.Content);
+            radio.Release();
+        }
+    }
+
     public class HyteraRadio
     {
 
-        private RadioStatus status;
+        private RadioStatus status = RadioStatus.Off;
 
         public void Init()
         {
@@ -27,8 +58,9 @@ namespace AdapterPattern
 
         public enum RadioStatus
         {
-            On,
-            Off
+            Off,
+            On
+            
         }
 
     }

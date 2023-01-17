@@ -2,18 +2,18 @@
 {
     public class PrintService
     {
-        public Logger logger { get; set; }
+        public Logger _logger { get; set; }
 
-        public PrintService()
+        public PrintService(Logger logger)
         {
-            logger = new Logger();
+            _logger = logger;
         }
 
         public void Print(string content, int copies)
         {
             for (int i = 1; i < copies+1; i++)
             {
-                logger.LogInformation($"Print {i} copy of {content}");
+                _logger.LogInformation($"Print {i} copy of {content}");
             }
         }
     }

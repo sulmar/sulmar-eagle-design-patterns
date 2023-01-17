@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SingletonPattern
 {
-    public class LoadBalancer
+    public class LoadBalancer : Singleton<LoadBalancer>
     {
         private readonly List<Server> servers;
 
@@ -23,6 +23,30 @@ namespace SingletonPattern
                 new Server { Name = "ServerE", IP = "192.168.0.22" },
             };
         }
+
+        /*
+        private static LoadBalancer _instance;
+        // public static LoadBalancer Instance => _instance ??= new LoadBalancer();
+
+        private static readonly object _instanceLock = new object();
+
+        public static LoadBalancer Instance
+        {
+            get
+            {
+                lock(_instanceLock )     // Monitor.Enter(_instanceLock)            
+                {
+                    if (_instance == null)
+                    {
+                        _instance = new LoadBalancer();
+                    }
+                    return _instance;
+                }                       // Monitor.Exit(_instanceLock)
+            }
+        }
+
+        */
+
 
         // Simple Load Balancer
         public Server NextServer => servers[random.Next(servers.Count)];

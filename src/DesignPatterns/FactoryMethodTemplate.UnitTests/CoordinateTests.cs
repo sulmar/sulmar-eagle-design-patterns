@@ -12,7 +12,7 @@ namespace FactoryMethodTemplate.UnitTests
             string wkt = "POINT (52 28)";
 
             // Act
-            Coordinate result = new Coordinate(wkt);
+            Coordinate result = Coordinate.CoordinateFromWkt(wkt);
 
             // Assert
             Assert.AreEqual(52, result.Longitude);
@@ -32,7 +32,7 @@ namespace FactoryMethodTemplate.UnitTests
 
 
             // Act
-            Coordinate result = new Coordinate(geojson);
+            Coordinate result = Coordinate.CoordinateFromGeoJson(geojson);
 
             // Assert
             Assert.AreEqual(52, result.Longitude);

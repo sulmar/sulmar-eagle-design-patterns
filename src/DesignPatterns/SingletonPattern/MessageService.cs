@@ -2,16 +2,16 @@
 {
     public class MessageService
     {
-        public Logger logger;
+        public Logger _logger;
 
-        public MessageService()
+        public MessageService(Logger logger)
         {
-            logger = new Logger();
+            _logger = logger;
         }
 
         public void Send(string message)
         {
-            logger.LogInformation($"Send {message}");
+            _logger.LogInformation($"Send {message}");
         }
     }
 }

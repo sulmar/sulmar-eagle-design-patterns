@@ -11,7 +11,7 @@ namespace DecoratorPattern.UnitTests
         public void CalculateSalary_Junior_ShouldCalculateBonus()
         {
             // Arrange
-            SalaryCalculator salaryCalculator = new SalaryCalculator(50, 1000);
+            ISalaryCalculator salaryCalculator = new DecoratorSalaryCalculator(50, 1000);
 
             Employee employee = new JuniorDeveloper { OvertimeSalary = TimeSpan.FromHours(2), NumberOfProjects = 1};
 

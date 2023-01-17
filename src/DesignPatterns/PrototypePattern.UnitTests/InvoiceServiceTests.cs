@@ -45,7 +45,7 @@ namespace PrototypePattern.UnitTests
             Product product1 = new Product("Keyboard", 250);
             Product product2 = new Product("Mouse", 150);
 
-            Invoice invoice = new Invoice("FA 1", DateTime.Parse("2022-03-01"), PaymentType.Transfer, customer);
+            Invoice invoice = new Invoice("FA 1", DateTime.Parse("2022-03-01"), PaymentType.Transfer, customer, DateTime.Parse("2023-01-31"));
             invoice.Details.Add(new InvoiceDetail(product1));
             invoice.Details.Add(new InvoiceDetail(product2, 3));
 

@@ -17,8 +17,10 @@ namespace BuilderPattern
             //PhoneTest();
 
             //SalesReportTest();
+            // FluentSalesReportTest();
+            LazyFluentSalesReportTest();
 
-            PersonTest();
+            // PersonTest();
         }
 
         private static void PersonTest()
@@ -34,28 +36,55 @@ namespace BuilderPattern
             Console.WriteLine(person);
         }
 
-        private static void SalesReportTest()
+        private static void LazyFluentSalesReportTest()
         {
             FakeOrdersService ordersService = new FakeOrdersService();
             IEnumerable<Order> orders = ordersService.Get();
 
-            SalesReport salesReport = new SalesReport();
+            LazyFluentSalesReportBuilder builder = new LazyFluentSalesReportBuilder(orders);
 
-            salesReport.Title = "Raport sprzedaży";
-            salesReport.CreateDate = DateTime.Now;
-            salesReport.TotalSalesAmount = orders.Sum(s => s.Amount);
+            SalesReport salesReport = builder
+                .AddHeader("Raport sprzedaży")
+                .AddSectionGender()
+                .AddSectionProducts()
+                .AddFooter()
+                .Build();
 
-            salesReport.GenderDetails = orders
-                .GroupBy(o => o.Customer.Gender)
-                .Select(g => new GenderReportDetail(
-                            g.Key,
-                            g.Sum(x => x.Details.Sum(d => d.Quantity)),
-                            g.Sum(x => x.Details.Sum(d => d.LineTotal))));
+            Console.WriteLine(salesReport);
 
-            salesReport.ProductDetails = orders
-                .SelectMany(o => o.Details)
-                .GroupBy(o => o.Product)
-                .Select(g => new ProductReportDetail(g.Key, g.Sum(p => p.Quantity), g.Sum(p => p.LineTotal)));
+        }
+
+        private static void FluentSalesReportTest()
+        {
+            FakeOrdersService ordersService = new FakeOrdersService();
+            IEnumerable<Order> orders = ordersService.Get();
+
+            EagerFluentSalesReportBuilder builder = new EagerFluentSalesReportBuilder(orders);
+
+            SalesReport salesReport = builder
+                .AddHeader("Raport sprzedaży")
+                .AddSectionGender()
+                .AddSectionProducts()
+                .AddFooter()
+                .Build();
+
+            Console.WriteLine(salesReport);
+
+        }
+
+            private static void SalesReportTest()
+        {
+            FakeOrdersService ordersService = new FakeOrdersService();
+            IEnumerable<Order> orders = ordersService.Get();
+
+            ISalesReportBuilder builder = new SalesReportBuilder(orders);
+
+            builder.AddHeader();
+            builder.AddSectionGender();
+            builder.AddSectionProducts();
+            builder.AddFooter();
+
+            SalesReport salesReport = builder.Build();
 
             Console.WriteLine(salesReport);
 

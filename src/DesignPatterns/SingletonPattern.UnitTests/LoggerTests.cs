@@ -15,7 +15,7 @@ namespace SingletonPattern.UnitTests
             PrintService printService = new PrintService();
 
             // Assert
-            Assert.AreSame(messageService.logger, printService.logger, "Different instances");
+            Assert.AreSame(messageService._logger, printService._logger, "Different instances");
 
         }
     }

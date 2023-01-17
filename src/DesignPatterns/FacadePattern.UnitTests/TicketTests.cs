@@ -24,17 +24,17 @@ namespace FacadePattern.UnitTests
             PaymentService paymentService = new PaymentService();
             EmailService emailService = new EmailService();
 
-            // Act
-            RailwayConnection railwayConnection = railwayConnectionRepository.Find(from, to, when);
-            decimal price = ticketCalculator.Calculate(railwayConnection, numberOfPlaces);
-            Reservation reservation = reservationService.MakeReservation(railwayConnection, numberOfPlaces);
-            Ticket ticket = new Ticket { RailwayConnection = reservation.RailwayConnection, NumberOfPlaces = reservation.NumberOfPlaces, Price = price };
-            Payment payment = paymentService.CreateActivePayment(ticket);
+            ITicketService ticketService = new OnlineTicketService(
+                railwayConnectionRepository, 
+                ticketCalculator, 
+                reservationService,
+                paymentService, 
+                emailService);
 
-            if (payment.IsPaid)
-            {
-                emailService.Send(ticket);
-            }
+            TicketParameters parameters = new TicketParameters(from, to, when, numberOfPlaces, false);
+
+            // Act
+            Ticket ticket = ticketService.Buy(parameters);
 
             // Assert
             Assert.AreEqual("Bydgoszcz", ticket.RailwayConnection.From);

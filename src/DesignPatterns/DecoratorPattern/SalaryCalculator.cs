@@ -10,7 +10,36 @@ namespace DecoratorPattern
     // Premia za oddanie każdego projektu
     // Premia za udział w szkoleniu ;-)
 
-    public class SalaryCalculator
+
+    public interface ISalaryCalculator
+    {
+        decimal CalculateSalary(Employee employee);
+    }
+
+    public class DecoratorSalaryCalculator : ISalaryCalculator
+    {
+        private readonly decimal amountPerHour;
+        private readonly decimal bonusPerProject;
+
+        public DecoratorSalaryCalculator(decimal amountPerHour, decimal bonusPerProject)
+        {
+            this.amountPerHour = amountPerHour;
+            this.bonusPerProject = bonusPerProject;
+        }
+
+        public decimal CalculateSalary(Employee employee)
+        {
+            Employee decoratedEmployee =
+                new ProjectsEmployeeDecorator(
+                    new OverTimeEmployeeDecorator(employee, amountPerHour), bonusPerProject);
+
+            decimal salary = decoratedEmployee.GetSalary();
+
+            return salary;
+        }
+    }
+
+    public class SalaryCalculator : ISalaryCalculator
     {
         private readonly decimal amountPerHour;
         private readonly decimal bonusPerProject;
@@ -37,6 +66,7 @@ namespace DecoratorPattern
 
             // premia za udział w szkoleniu
             // etc. ...
+            salary += 1000;
 
             return salary;           
            
