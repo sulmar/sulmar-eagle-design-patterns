@@ -11,13 +11,65 @@ namespace StatePattern.UnitTests
         public void Order_WhenCreated_ShouldBePending()
         {
             // Arrange
-            Order order = new Order();
+            Order order = new OrderProxy();
+
+
+            var graph = order.Graph;
 
             // Act
             var result = order.Status;
 
             // Assert
             result.Should().Be(OrderStatus.Pending);
+
+        }
+
+        [Fact]
+        public void Confirm_WhenPending_ShouldBeSent()
+        {
+            // Arrange
+            Order order = new OrderProxy();
+
+            // Act
+            order.Confirm();
+
+            var result = order.Status;
+
+            // Assert
+            result.Should().Be(OrderStatus.Sent);
+
+        }
+
+        [Fact]
+        public void Confirm_WhenSent_ShouldBeDelivered()
+        {
+            // Arrange
+            Order order = new OrderProxy();
+
+            // Act
+            order.Confirm();
+            order.Confirm();
+
+            var result = order.Status;
+
+            // Assert
+            result.Should().Be(OrderStatus.Delivered);
+
+        }
+
+        [Fact]
+        public void Cancel_WhenPending_ShouldBeCancelled()
+        {
+            // Arrange
+            Order order = new OrderProxy();
+
+            // Act
+            order.Cancel();
+
+            var result = order.Status;
+
+            // Assert
+            result.Should().Be(OrderStatus.Cancelled);
 
         }
 

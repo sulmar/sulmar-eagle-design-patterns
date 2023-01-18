@@ -9,7 +9,7 @@ namespace InterpreterPattern.UnitTests
         public void Evaluate_ValidExpression_ShouldReturnResult()
         {
             // Arrange
-            string expression = "2 3 + 1 - 2 *"; // (2 + 3) * (1 - 2) = -5
+            string expression = "2 3 + 1 2 - *"; // (2 + 3) * (1 - 2) = -5
 
             var parser = new Parser();
 

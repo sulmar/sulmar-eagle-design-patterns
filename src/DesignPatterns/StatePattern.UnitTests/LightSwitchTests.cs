@@ -16,7 +16,9 @@ namespace StatePattern.UnitTests
             LightSwitch lightSwitch = new LightSwitch();
 
             // Assert
-            Assert.AreEqual(LightSwitchState.Off, lightSwitch.State);
+           // Assert.AreEqual(LightSwitchState.Off, lightSwitch.State);
+
+            Assert.IsInstanceOfType(lightSwitch.State, typeof(OffState));
 
         }
 
@@ -30,7 +32,9 @@ namespace StatePattern.UnitTests
             lightSwitch.Push();
 
             // Assert
-            Assert.AreEqual(LightSwitchState.On, lightSwitch.State);
+            Assert.IsInstanceOfType(lightSwitch.State, typeof(OnState));
+
+//            Assert.AreEqual(LightSwitchState.On, lightSwitch.State);
         }
 
         [TestMethod]
@@ -45,7 +49,9 @@ namespace StatePattern.UnitTests
             lightSwitch.Push();
 
             // Assert
-            Assert.AreEqual(LightSwitchState.Off, lightSwitch.State);
+            // Assert.AreEqual(LightSwitchState.Off, lightSwitch.State);
+
+            Assert.IsInstanceOfType(lightSwitch.State, typeof(OffState));
         }
 
     }

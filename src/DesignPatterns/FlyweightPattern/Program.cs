@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Xml.Schema;
 
 namespace FlyweightPattern
 {
@@ -12,9 +13,18 @@ namespace FlyweightPattern
         {
             Console.WriteLine("Hello Flyweight Pattern!");
 
-            Game game = new Game(TreeFactory.Create());
+            IPointService pointService = new PointService(new Models.PointIconFactory());
 
-            game.Play();
+            var points = pointService.GetAll();
+
+            foreach (var point in points)
+            {
+                point.Draw();
+            }
+
+            //Game game = new Game(TreeFactory.Create());
+
+            //game.Play();
         }
     }
 

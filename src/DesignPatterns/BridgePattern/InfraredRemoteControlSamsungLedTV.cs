@@ -56,6 +56,11 @@ namespace BridgePattern
         }
     }
 
+    public class AppRemoteControlSamsungLedTV
+    {
+
+    }
+
     public class InfraredRemoteControlSonyLedTV
     {
         public bool IsSwitchOn { get; private set; }
@@ -104,6 +109,141 @@ namespace BridgePattern
             Console.WriteLine($"Set Channel by BT");
             SelectedChannel = number;
             Console.WriteLine($"Sony: Setting channel #{number}");
+        }
+    }
+
+    public class AppRemoteControlSonyLedTV
+    {
+
+    }
+
+
+    // Abstract Feature
+    public abstract class RemoteControl
+    {
+        // Implementor
+        protected ILedTV device;
+
+        protected RemoteControl(ILedTV device)
+        {
+            this.device = device;
+        }
+
+        public abstract void SwitchOn();
+        public abstract void SwitchOff();
+        public abstract void SetChannel(byte number);
+    }
+
+    // Refined Abstraction
+    public class BluetoothRemoteControl : RemoteControl
+    {
+        public BluetoothRemoteControl(ILedTV device) : base(device)
+        {
+        }
+
+        public override void SetChannel(byte number)
+        {
+            Console.WriteLine($"Set Channel by BT");
+            device.SetChannel(number);
+        }
+
+        public override void SwitchOff()
+        {
+            Console.WriteLine($"Switch Off by BT");
+            device.SwitchOff();
+        }
+
+        public override void SwitchOn()
+        {
+            Console.WriteLine($"Switch On by BT");
+            device.SwitchOn();
+        }
+    }
+
+    // Refined Abstraction
+    public class InfraredRemoteControl : RemoteControl
+    {
+        public InfraredRemoteControl(ILedTV device) : base(device)
+        {
+        }
+
+        public override void SetChannel(byte number)
+        {
+            Console.WriteLine($"Set Channel by IR");
+            device.SetChannel(number);
+        }
+
+        public override void SwitchOff()
+        {
+            Console.WriteLine($"Switch Off by IR");
+            device.SwitchOff();
+        }
+
+        public override void SwitchOn()
+        {
+            Console.WriteLine($"Switch On by IR");
+            device.SwitchOn();
+        }
+    }
+
+    // Abstract Implementation (Implementor)
+    public interface ILedTV
+    {
+        bool IsOn { get;  }
+        byte CurrentChannel { get; }
+
+        void SwitchOn();
+        void SwitchOff();
+        void SetChannel(byte number);
+    }
+
+    public class SonyLedTV : ILedTV
+    {
+        public bool IsOn { get; private set; }
+
+        public byte CurrentChannel { get; private set; }
+
+        public void SetChannel(byte number)
+        {
+            CurrentChannel = number;
+            Console.WriteLine($"Sony: set channel {number}");
+        }
+
+        public void SwitchOff()
+        {
+            IsOn = false;
+            Console.WriteLine("Sony: switch off");
+        }
+
+        public void SwitchOn()
+        {
+            IsOn = true;
+            Console.WriteLine("Sony: switch on");
+        }
+    }
+
+    public class SamsungLedTV : ILedTV
+    {
+        public bool IsOn { get; private set; }
+
+        public byte CurrentChannel { get; private set; }
+
+        public void SetChannel(byte number)
+        {
+            CurrentChannel = number;
+            Console.WriteLine($"Samsung: set channel {number}");
+        }
+
+        public void SwitchOff()
+        {
+            IsOn = false;
+            Console.WriteLine("Samsung: switch off");
+        }
+
+        public void SwitchOn()
+        {
+            IsOn = true;
+            Console.WriteLine("Samsung: switch on");
         }
     }
 }
