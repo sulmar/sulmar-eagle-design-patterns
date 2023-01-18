@@ -33,9 +33,10 @@ namespace MementoPattern
             // Undo
             if (articleCaretaker.CanGetState)
             {
-                article.SetMemento(articleCaretaker.GetState());
-                Console.WriteLine(article.Content);
+                article.SetMemento(articleCaretaker.GetState());             
             }
+
+            Console.WriteLine(article.Content);
         }
 
         private static void AgreementTest()
