@@ -50,7 +50,7 @@ namespace CommandPattern
 
         public bool CanExecute()
         {
-            return string.IsNullOrEmpty(Content);
+            return string.IsNullOrEmpty(message.Content);
         }
     }
 

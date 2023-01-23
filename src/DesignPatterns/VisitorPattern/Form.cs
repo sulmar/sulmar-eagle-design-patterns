@@ -25,7 +25,7 @@ namespace VisitorPattern
 
                     case ControlType.TextBox:
                         html += $"<span>{control.Caption}</span><input type='text' value='{control.Value}'></input>"; break;
-                        +
+                        
                     case ControlType.Checkbox:
                         html += $"<span>{control.Caption}</span><input type='checkbox' value='{control.Value}'></input>"; break;
 

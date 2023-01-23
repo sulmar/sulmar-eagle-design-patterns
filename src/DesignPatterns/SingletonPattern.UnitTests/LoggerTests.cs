@@ -11,8 +11,8 @@ namespace SingletonPattern.UnitTests
             // Arrange
 
             // Act
-            MessageService messageService = new MessageService();
-            PrintService printService = new PrintService();
+            MessageService messageService = new MessageService(Logger.Instance);
+            PrintService printService = new PrintService(Logger.Instance);
 
             // Assert
             Assert.AreSame(messageService._logger, printService._logger, "Different instances");
