@@ -81,9 +81,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BridgePattern", "BridgePatt
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BridgePattern.UnitTests", "BridgePattern.UnitTests\BridgePattern.UnitTests.csproj", "{88E5D701-356C-471F-8A3B-54112C224CE3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainOfResponsibilityPattern.UnitTests.UnitTests", "ChainOfResponsibilityPattern.UnitTests.UnitTests\ChainOfResponsibilityPattern.UnitTests.UnitTests.csproj", "{588DF93F-CCCF-4045-99AA-7E484E98E519}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainOfResponsibilityPattern.UnitTests", "ChainOfResponsibilityPattern.UnitTests.UnitTests\ChainOfResponsibilityPattern.UnitTests.csproj", "{588DF93F-CCCF-4045-99AA-7E484E98E519}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompositePattern", "CompositePattern\CompositePattern.csproj", "{5A2CC5E9-EC69-409F-A0D3-027FC26BA897}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CompositePattern", "CompositePattern\CompositePattern.csproj", "{5A2CC5E9-EC69-409F-A0D3-027FC26BA897}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
