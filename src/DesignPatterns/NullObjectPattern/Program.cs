@@ -8,37 +8,73 @@ namespace NullObjectPattern
         {
             Console.WriteLine("Hello Null Object Pattern!");
 
-            IProductRepository productRepository = new FakeProductRepository();
+            NullObjectTest();
 
-            Product product = productRepository.Get(1);
 
-            // Problem: Zawsze musimy sprawdzać czy obiekt nie jest pusty (null).
+            RealObjectTest();
 
-            if (product != null)
-            {
-                product.RateId(3);
-            }
+        }
+
+        private static void NullObjectTest()
+        {
+            IProductRepository productRepository = new FakeNullProductRepository();
+
+            ProductBase product = productRepository.Get(1);
+
+            product.RateId(3);
+        }
+
+        private static void RealObjectTest()
+        {
+            IProductRepository productRepository = new FakeRealProductRepository();
+
+            ProductBase product = productRepository.Get(1);
+
+            product.RateId(3);
         }
     }
 
     public interface IProductRepository
     {
-        Product Get(int id);
+        ProductBase Get(int id);
     }
 
-    public class FakeProductRepository : IProductRepository
+    public class FakeNullProductRepository : IProductRepository
     {
-        public Product Get(int id)
+        public ProductBase Get(int id) => ProductBase.Null;
+    }
+
+    public class FakeRealProductRepository : IProductRepository
+    {
+        public ProductBase Get(int id)
         {
-            return null;
+            return new Product();
         }
     }
 
-    public class Product
+    // Abstract Object
+    public abstract class ProductBase
     {
-        private int rate;
+        protected int rate;
 
-        public void RateId(int rate)
+        public abstract void RateId(int rate);
+
+        public static readonly ProductBase Null = new NullProduct();
+
+        // Null Object
+        private class NullProduct : ProductBase
+        {
+            public override void RateId(int rate)
+            {
+                // nic nie rób
+            }
+        }
+    }
+
+    // Real Object
+    public class Product : ProductBase 
+    {        
+        public override void RateId(int rate)
         {
             this.rate = rate;
         }
