@@ -2,86 +2,51 @@
 
 namespace StrategyPattern
 {
-    
+    public interface IPredicateStrategy
+    {
+        bool IsValid(Order order);        
+    }
+
     public interface IDiscountStrategy
     {
-        bool CanDiscount(Order order);
-        decimal Discount(Order order);
+        decimal CalculateDiscount(Order order);
     }
 
-    public interface ICanDiscountStrategy
-    {
-        bool CanDiscount(Order order);        
-    }
-
-    public interface ICalculateDiscountStrategy
-    {
-        decimal Discount(Order order);
-    }
-
-    public class HappyHoursCanDiscountStrategy : ICanDiscountStrategy
+    public class HappyHoursPredicateStrategy : IPredicateStrategy
     {
         private readonly TimeSpan from;
         private readonly TimeSpan to;
 
-        public HappyHoursCanDiscountStrategy(TimeSpan from, TimeSpan to)
+        public HappyHoursPredicateStrategy(TimeSpan from, TimeSpan to)
         {
             this.from = from;
             this.to = to;
         }
 
-        public bool CanDiscount(Order order) => order.OrderDate.TimeOfDay >= from && order.OrderDate.TimeOfDay < to;
+        public bool IsValid(Order order) => order.OrderDate.TimeOfDay >= from && order.OrderDate.TimeOfDay < to;
     }
 
-    public class GenderCanDiscountStrategy : ICanDiscountStrategy
+    public class GenderPredicateStrategy : IPredicateStrategy
     {
         private readonly Gender gender;
-        public GenderCanDiscountStrategy(Gender gender) => this.gender = gender;
-        public bool CanDiscount(Order order) => order.Customer.Gender == gender;
+        public GenderPredicateStrategy(Gender gender) => this.gender = gender;
+        public bool IsValid(Order order) => order.Customer.Gender == gender;
     }
 
-    public class PercentageCalculateDiscountStrategy : ICalculateDiscountStrategy
+    public class PercentageDiscountStrategy : IDiscountStrategy
     {
         private readonly decimal percentage;
-        public PercentageCalculateDiscountStrategy(decimal percentage) => this.percentage = percentage;
-        public decimal Discount(Order order) => order.Amount * percentage;
+        public PercentageDiscountStrategy(decimal percentage) => this.percentage = percentage;
+        public decimal CalculateDiscount(Order order) => order.Amount * percentage;
     }
 
-    public class HappyHoursPercentageDiscountStrategy : IDiscountStrategy
+    public class FlatDiscountStrategy : IDiscountStrategy
     {
-        private readonly TimeSpan from;
-        private readonly TimeSpan to;
-        private readonly decimal percentage;
-
-        public HappyHoursPercentageDiscountStrategy(TimeSpan from, TimeSpan to, decimal percentage)
-        {
-            this.from = from;
-            this.to = to;
-            this.percentage = percentage;
-        }
-
-        public bool CanDiscount(Order order) => order.OrderDate.TimeOfDay >= from && order.OrderDate.TimeOfDay < to;
-        public decimal Discount(Order order) => order.Amount * percentage;
-    }
-
-    public class HappyHoursFixedDiscountStrategy : IDiscountStrategy
-    {
-        private readonly TimeSpan from;
-        private readonly TimeSpan to;
         private readonly decimal amount;
-
-        public HappyHoursFixedDiscountStrategy(TimeSpan from, TimeSpan to, decimal amount)
-        {
-            this.from = from;
-            this.to = to;
-            this.amount = amount;
-        }
-
-        public bool CanDiscount(Order order) => order.OrderDate.TimeOfDay >= from && order.OrderDate.TimeOfDay < to;
-        public decimal Discount(Order order) => amount;
+        public FlatDiscountStrategy(decimal amount) => this.amount = amount;
+        public decimal CalculateDiscount(Order order) => amount;
     }
 
-    
 
     public class DelegateDiscountOrderCalculator
     {
@@ -107,25 +72,25 @@ namespace StrategyPattern
 
     public class DiscountOrderCalculator
     {
-        // private readonly IDiscountStrategy discountStrategy;
+        private readonly IPredicateStrategy predicateStrategy;
+        private readonly IDiscountStrategy discountStrategy;
 
-        private readonly ICanDiscountStrategy canDiscountStrategy;
-        private readonly ICalculateDiscountStrategy calculateDiscountStrategy;
+        private readonly decimal NoDiscount = decimal.Zero;
 
-        public DiscountOrderCalculator(ICanDiscountStrategy canDiscountStrategy, ICalculateDiscountStrategy calculateDiscountStrategy)
+        public DiscountOrderCalculator(IPredicateStrategy predicateStrategy, IDiscountStrategy calculateDiscountStrategy)
         {
-            this.canDiscountStrategy = canDiscountStrategy;
-            this.calculateDiscountStrategy = calculateDiscountStrategy;
+            this.predicateStrategy = predicateStrategy;
+            this.discountStrategy = calculateDiscountStrategy;
         }
 
         public decimal CalculateDiscount(Order order)
         {
-            if (canDiscountStrategy.CanDiscount(order)) // Predykat
+            if (predicateStrategy.IsValid(order)) // Predykat
             {
-                return calculateDiscountStrategy.Discount(order); // Calculate Discount
+                return discountStrategy.CalculateDiscount(order); // Calculate Discount
             }
             else
-                return 0;
+                return NoDiscount;
         }
     }
 
