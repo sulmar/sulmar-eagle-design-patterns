@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace NullObjectPattern
@@ -45,7 +46,7 @@ namespace NullObjectPattern
     {
         private readonly Dictionary<int, Product> products = new();
 
-        private readonly ProductBase.NullProduct NotFound = new();
+        private readonly ProductBase NotFound = ProductBase.Null;
 
         public FakeProductRepository()
         {
@@ -77,7 +78,7 @@ namespace NullObjectPattern
         public static readonly ProductBase Null = new NullProduct();
 
         // Null Object
-        public class NullProduct : ProductBase
+        private class NullProduct : ProductBase
         {
             public NullProduct()
             {
