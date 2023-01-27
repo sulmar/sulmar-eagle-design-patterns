@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace NullObjectPattern
 {
@@ -10,26 +11,27 @@ namespace NullObjectPattern
 
             NullObjectTest();
 
-
             RealObjectTest();
 
         }
 
         private static void NullObjectTest()
         {
-            IProductRepository productRepository = new FakeNullProductRepository();
+            IProductRepository productRepository = new FakeProductRepository();
 
-            ProductBase product = productRepository.Get(1);
+            ProductBase product = productRepository.Get(3);
 
+            Console.WriteLine(product.Name);
             product.RateId(3);
         }
 
         private static void RealObjectTest()
         {
-            IProductRepository productRepository = new FakeRealProductRepository();
+            IProductRepository productRepository = new FakeProductRepository();
 
             ProductBase product = productRepository.Get(1);
 
+            Console.WriteLine(product.Name);
             product.RateId(3);
         }
     }
@@ -39,16 +41,26 @@ namespace NullObjectPattern
         ProductBase Get(int id);
     }
 
-    public class FakeNullProductRepository : IProductRepository
+    public class FakeProductRepository : IProductRepository
     {
-        public ProductBase Get(int id) => ProductBase.Null;
-    }
+        private readonly Dictionary<int, Product> products = new();
 
-    public class FakeRealProductRepository : IProductRepository
-    {
+        private readonly ProductBase.NullProduct NotFound = new();
+
+        public FakeProductRepository()
+        {
+            products = new Dictionary<int, Product>
+            {
+                [1] = new Product {  Id = 1, Name = "DELL Laptop"  },
+                [2] = new Product {  Id = 2, Name = "Apple Laptop" },
+            };
+        }
+
         public ProductBase Get(int id)
         {
-            return new Product();
+            ProductBase product = products.GetValueOrDefault(id);
+
+            return product ?? NotFound;
         }
     }
 
@@ -57,13 +69,22 @@ namespace NullObjectPattern
     {
         protected int rate;
 
+        public int Id { get; set; }
+        public string Name { get; set; }
+
         public abstract void RateId(int rate);
 
         public static readonly ProductBase Null = new NullProduct();
 
         // Null Object
-        private class NullProduct : ProductBase
+        public class NullProduct : ProductBase
         {
+            public NullProduct()
+            {
+                Id = -1;
+                Name = "Not Available";
+            }
+
             public override void RateId(int rate)
             {
                 // nic nie rób
